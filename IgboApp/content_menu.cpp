@@ -144,7 +144,7 @@ void ContentMenu::GoBackToVocab(wxCommandEvent& event) {
 		int x, y;
 		this->GetPosition(&x, &y);
 
-		StartingMenu* frame = new StartingMenu();
+		VocabMenu* frame = new VocabMenu();
 		frame->SetPosition(wxPoint(x, y));
 		frame->Show();
 		this->Destroy();
@@ -337,31 +337,35 @@ void ContentMenu::EditWord(wxCommandEvent& event) {
 	EditWordMenu* dialog = new EditWordMenu( &word_info.word, &word_info.definition);
 	if (dialog->ShowModal() == wxID_OK) {
 		dialog->Destroy();
+		
+		// Make sure their edit didn't create a duplicate
+		boolean duplicate_found = false;
+		for (word_t word : cat_list) {
+			if (word.word == word_info.word) {
+				duplicate_found = true;
+			}
+		}
+
+		if (duplicate_found) {
+			wxLogMessage("A word already has this name, try again!");
+		}
+		else {
+			search_list->Delete(found_index);
+			search_list->Append(word_info.word + ": " + word_info.definition);
+			curr_dict.at(category)[found_index] = word_info;
+
+			*info_box << "Edited word was placed at the bottom of the list!";
+		}
 	}
 	else {
 		dialog->Destroy();
 	}
-
-	// Make sure their edit didn't create a duplicate
-	boolean duplicate_found = false;
-	for (word_t word : cat_list) {
-		if (word.word == word_info.word) {
-			duplicate_found = true;
-			return;
-		}
-	}
-
-	wxLogMessage("Checked for duplicates");
-	if (duplicate_found) {
-		wxLogMessage("A word already has this name, try again!");
-	}
-	else {
-		wxLogMessage("Successfully edited");
-		curr_dict.at(category)[found_index] = word_info;
-	}
-	wxLogMessage("Got to end of function");
 }
 
+/*
+* This method deletes the selected word from the menu's copy
+* of the dictionary.
+*/
 void ContentMenu::DeleteWord(wxCommandEvent& event) {
 
 	// Find existing word in json obj
@@ -373,10 +377,11 @@ void ContentMenu::DeleteWord(wxCommandEvent& event) {
 	vector<word_t> cat_list = curr_dict.at(category);
 	word_t word_info;
 	vector<word_t>::iterator word_iter;
+	int word_index = -1;
 
 	for (word_iter = cat_list.begin();
 		word_iter != cat_list.end(); word_iter++) {
-
+		word_index++;
 		if (word_iter->word == selected_word) {
 			break;
 		}
@@ -389,6 +394,7 @@ void ContentMenu::DeleteWord(wxCommandEvent& event) {
 		"CAUTION: PERMANENT DELETION CHOSEN", wxYES_NO);
 
 	if (confirm->ShowModal() == wxID_YES) {
+		search_list->Delete(word_index);
 		cat_list.erase(word_iter);
 		curr_dict.at(category) = cat_list;
 	}
@@ -398,12 +404,22 @@ void ContentMenu::DeleteWord(wxCommandEvent& event) {
 	confirm->Destroy();
 }
 
+/*
+* This method saves the user's changes by writing the menu's current
+* copy of the dictionary to the original dictionary.
+* Before attempting to write, it creates a backup. If there is an error,
+* the erronenous dictionary (the original) will be deleted and replaced
+* with the backup.
+* This effectively means that upon error, the user's changes will not be saved
+* (the used will be notified of this).
+*/
 void ContentMenu::PushChanges(wxCommandEvent& event) {
 	fstream main_file;
 	fstream backup_file;
 
 	wxMessageDialog* confirm = new wxMessageDialog(this,
-		"Are you sure you want to push changes to file? ALL CHANGES ARE PERMANENT",
+		"Are you sure you want to push changes to file? ALL CHANGES ARE PERMANENT\n"
+		"Additionally, your changes will not be saved upon error",
 		"CAUTION: PERMANENT CHANGES CHOSEN", wxYES_NO);
 
 	if (confirm->ShowModal() == wxID_YES) {

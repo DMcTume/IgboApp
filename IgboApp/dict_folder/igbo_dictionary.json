@@ -33,18 +33,36 @@
       "word": "WORD 5"
     }
   ],
-    "VERBS": [
-        {
-            "definition": "DEF 3",
-            "example": "3rd ex",
-            "image": "3rd img",
-            "word": "WORD 3"
-        },
-        {
-            "definition": "DEF 4",
-            "example": "4th ex",
-            "image": "4th img",
-            "word": "WORD 4"
-        }
-    ]
+  "VERBS": [
+    {
+      "definition": "DEF 3",
+      "example": "3rd ex",
+      "image": "3rd img",
+      "word": "WORD 3"
+    },
+    {
+      "definition": "DEF 4",
+      "example": "4th ex",
+      "image": "4th img",
+      "word": "WORD 4"
+    },
+    {
+      "definition": "DEF 1",
+      "example": "blank ex",
+      "image": "blank img",
+      "word": "WORD 1"
+    },
+    {
+      "definition": "DEF 2",
+      "example": "blank ex",
+      "image": "blank img",
+      "word": "WORD 2"
+    },
+    {
+      "definition": "DEF 5",
+      "example": "blank ex",
+      "image": "blank img",
+      "word": "WORD 5"
+    }
+  ]
 }
