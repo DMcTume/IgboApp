@@ -29,6 +29,9 @@ VocabMenu::VocabMenu() : GenericMenuFrame("Vocab Menu",
 		this, wxID_ANY);
 }
 
+/*
+* Replaces the current frame with the StartingMenu
+*/
 void VocabMenu::BackToStart(wxCommandEvent& event) {
 	int x = 0;
 	int y = 0;
@@ -41,6 +44,13 @@ void VocabMenu::BackToStart(wxCommandEvent& event) {
 	this->Destroy();
 }
 
+/*
+* Opens up the ContentMenu for the selected part of speech, 
+* thus allowing the user to edit the dictionary.
+* First attempts to load in the dictionary's json;
+* if loading throws, the ContentMenu is not opened and a 
+* message is presented.
+*/
 void VocabMenu::OpenContent(wxCommandEvent& event) {
 	
 	fstream dict_file;

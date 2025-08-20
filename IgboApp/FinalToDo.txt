@@ -2,3 +2,4 @@
 2. Remove makeNewButton() found in GenericMenu
 3. ContentMenu: only print Exit check if a change was made 
 	(just use a boolean)
+4. Make default_flags an inherited method

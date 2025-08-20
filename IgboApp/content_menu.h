@@ -1,12 +1,17 @@
+/*
+* This menu is used to edit the selected dictionary.
+* It is divided into two panels:
+* the top panel, which provides multiple different methods of editing,
+* and the bottom panel, which facilitates word selection.
+*/
+
 #pragma once
 
 #ifndef content_menu
 #define content_menu
 
 #include "generic_menu.h"
-#include "json_config.h" // json.hpp has no guards
-
-// NOTE: work on FIXED SIZE OF WHOLE WINDOW, NOT SUB-PANELS
+#include "json_config.h"
 
 #define TOP_PANEL_PROPORTION (3)
 #define BOTTOM_PANEL_PROPORTION (7)
@@ -73,8 +78,6 @@ private:
 	// Other Non-Component Values
 
 	string category;
-
-	// changed when dict is modified; used to know when to read
 	bool dict_update_required; 
 	json curr_dict;
 	string dict_path = IGBO_DICT_DIR;
@@ -84,15 +87,35 @@ private:
 	// Though other methods may edit curr_dict,
 	// Changes are only pushed when one of the back buttons are chosen
 	// Or when the push change button is selected
+
+	/*
+	* Returns to VocabMenu (part of speech selection)
+	* Automatically pushes changes if needed
+	*/
 	void GoBackToVocab(wxCommandEvent& event);
+
+	/*
+	* Returns to the StartingMenu
+	* Automatically pushes changes if needed
+	*/
 	void GoBackToMainMenu(wxCommandEvent& event);
 	
+	// Searches dictionary for user's query
 	void SearchJSON(wxCommandEvent& event);
+
+	// Presents options for when a word is selected/clicked on
 	void SelectWord(wxCommandEvent& event);
 
+	// Add a new word to the dictionary
 	void AddWord(wxCommandEvent& event);
+
+	// Edit an existing word in the dictionary
 	void EditWord(wxCommandEvent& event);
+
+	// Delete an existing word in the dictionary
 	void DeleteWord(wxCommandEvent& event);
+
+	// Save your changes by writing them to the dictionary
 	void PushChanges(wxCommandEvent& event);
 
 public:

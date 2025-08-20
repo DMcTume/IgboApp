@@ -1,6 +1,8 @@
 #include "starting_menu_frame.h"
 
-// Run the app
+/*
+* Runs the app by executing from StartingMenu.
+*/
 
 class MainApp : public wxApp {
 public: 

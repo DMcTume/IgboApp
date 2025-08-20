@@ -4,13 +4,8 @@
 #include "edit_word_menu.h"
 
 #include <vector>
-#include <cstdio> // needed for remove method
+#include <cstdio>
 
-/*
-* To solve loading json problem:
-* Load json in vocab menu and pass it to this menu
-* Then just set the json object equal to this object's attribute
-*/
 
 ContentMenu::ContentMenu(const char *menu_name, 
 	string category, json curr_dict) : 
@@ -136,6 +131,10 @@ ContentMenu::ContentMenu(const char *menu_name,
 	add_button->Bind(wxEVT_BUTTON, &ContentMenu::AddWord, this, wxID_ANY);
 }
 
+/*
+* Brings user back to the VocabMenu, but first asks if they want
+* to save their current changes.
+*/
 void ContentMenu::GoBackToVocab(wxCommandEvent& event) {
 	
 	wxMessageDialog* exit_check = new wxMessageDialog(this, "Are you sure you want to exit without pushing changes?",
@@ -156,6 +155,10 @@ void ContentMenu::GoBackToVocab(wxCommandEvent& event) {
 	exit_check->Destroy();
 }
 
+/*
+* Brings user back to the StartingMenu, but first asks if they want
+* to save their current changes.
+*/
 void ContentMenu::GoBackToMainMenu(wxCommandEvent& event) {
 	
 	wxMessageDialog* exit_check = new wxMessageDialog(this, "Are you sure you want to exit without pushing changes?",
@@ -178,13 +181,19 @@ void ContentMenu::GoBackToMainMenu(wxCommandEvent& event) {
 
 // Functions for ListBox
 
+/*
+* First loads updates the menu's copy of the dictionary if needed.
+* It then presents all words that contain the user's searched word.
+* It also disables some of the top panel methods, specfically
+* the ones that require a word to be selected (because this method resets
+* selection).
+*/
 void ContentMenu::SearchJSON(wxCommandEvent& event) { // Includes binding for edit button
 
 	fstream dict_file;
 	json dict;
 
 	try {
-
 		if (dict_update_required) {
 			if (open_JSON(&dict_file, IGBO_DICT_DIR, 'R')) {
 				throw new runtime_error("Could not open dictionary file!");
@@ -198,7 +207,7 @@ void ContentMenu::SearchJSON(wxCommandEvent& event) { // Includes binding for ed
 			dict = curr_dict;
 		}
 
-		vector<word_t> word_list = dict.at("NOUNS");
+		vector<word_t> word_list = dict.at(category);
 		
 		string search_word = (string) user_input->GetLineText(0).ToAscii();
 		if (search_word.empty()) {
@@ -248,6 +257,10 @@ void ContentMenu::SearchJSON(wxCommandEvent& event) { // Includes binding for ed
 	}
 }
 
+/*
+* This method enables top-panel methods that require a word to 
+* be selected once a user clicks on a word.
+*/
 void ContentMenu::SelectWord(wxCommandEvent& event) {
 
 	edit_button->SetLabel("Edit Word");
@@ -259,6 +272,13 @@ void ContentMenu::SelectWord(wxCommandEvent& event) {
 
 // Option Button Functions:
 
+/*
+* This method brings up the EditWordMenu so the user can create the 
+* word they want to add.
+* It then adds the new word to the menu's current copy of the dictionary.
+* This method does not allow words of the same name to be added.
+* (Other attributes, such as definition, can be matching, however)
+*/
 void ContentMenu::AddWord(wxCommandEvent& event) {
 	string new_word_name;
 	string new_definition;
@@ -288,6 +308,13 @@ void ContentMenu::AddWord(wxCommandEvent& event) {
 	curr_dict.at(category)[new_index] = new_word;
 }
 
+/*
+* This method brings up the EditWordMenu so the user can change the
+* attributes of an existing word.
+* It does this by editing the menu's copy of the dictionary.
+* If a word is edited, it cannot have the same name as another word
+* already in the dictionary.
+*/
 void ContentMenu::EditWord(wxCommandEvent& event) {
 
 	// Find existing word in json obj
@@ -315,7 +342,24 @@ void ContentMenu::EditWord(wxCommandEvent& event) {
 		dialog->Destroy();
 	}
 
-	curr_dict.at(category)[found_index] = word_info;
+	// Make sure their edit didn't create a duplicate
+	boolean duplicate_found = false;
+	for (word_t word : cat_list) {
+		if (word.word == word_info.word) {
+			duplicate_found = true;
+			return;
+		}
+	}
+
+	wxLogMessage("Checked for duplicates");
+	if (duplicate_found) {
+		wxLogMessage("A word already has this name, try again!");
+	}
+	else {
+		wxLogMessage("Successfully edited");
+		curr_dict.at(category)[found_index] = word_info;
+	}
+	wxLogMessage("Got to end of function");
 }
 
 void ContentMenu::DeleteWord(wxCommandEvent& event) {

@@ -1,3 +1,8 @@
+/*
+* This frames helps set up the ContentMenu by having the user
+* choose which part of speech they want to edit within the dictionary.
+*/
+
 #pragma once
 
 #ifndef VOCAB_MENU
@@ -18,8 +23,10 @@ private:
 	wxButton* misc_button;
 	wxButton* back_button;
 
-	// Events:
+	// Brings user back to the StartingMenu
 	void BackToStart(wxCommandEvent& event);
+
+	// Opens up the menu for editing the selected part of speech
 	void OpenContent(wxCommandEvent& event);
 
 public:

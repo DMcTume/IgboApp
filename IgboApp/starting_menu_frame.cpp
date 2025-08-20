@@ -34,6 +34,9 @@ void StartingMenu::ShowAppDescription(wxCommandEvent& event) {
 	wxLogMessage("Description is yet to be written lol");
 }
 
+/*
+* Replaces this menu with a new one for editing vocab.
+*/
 void StartingMenu::OpenVocabFrame(wxCommandEvent& event) {
 	int x_coord = 0;
 	int y_coord = 0;
@@ -45,6 +48,11 @@ void StartingMenu::OpenVocabFrame(wxCommandEvent& event) {
 	this->Destroy();
 }
 
+/*
+* Replaces this menu with a new one for practicing vocab.
+* First asks the user which part of speech they want to practice,
+* which is then checked by the new frame.
+*/
 void StartingMenu::OpenPracticeMenu(wxCommandEvent& event) {
 	
 	// Initial category selection for practice
@@ -59,7 +67,6 @@ void StartingMenu::OpenPracticeMenu(wxCommandEvent& event) {
 
 		PracticeMenu* frame = new PracticeMenu((string) get_category->GetStringSelection());
 		frame->SetPosition(wxPoint(x, y));
-		//frame->Show();
 		get_category->Destroy();
 		this->Destroy();
 	}
