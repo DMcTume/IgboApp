@@ -1,0 +1,43 @@
+{
+    "ADJECTIVES": [],
+    "MISC": [],
+    "NOUNS": [
+        {
+            "definition": "very tasty",
+            "example": "1st ex",
+            "image": "1st img",
+            "word": "AVOCADO"
+        },
+        {
+            "definition": "hopefully",
+            "example": "2nd ex",
+            "image": "2nd img",
+            "word": "this works"
+        },
+        {
+            "definition": "3rd def",
+            "example": "3rd ex",
+            "image": "3rd img",
+            "word": "coconut"
+        },
+        {
+            "definition": "VERY SMELLY",
+            "example": "4th ex",
+            "image": "4th img",
+            "word": "DURIAN"
+        },
+        {
+            "definition": "trying this",
+            "example": "5th ex",
+            "image": "5th img",
+            "word": "test after long time"
+        },
+        {
+            "definition": "new def1",
+            "example": "blank ex",
+            "image": "blank img",
+            "word": "new word1"
+        }
+    ],
+    "VERBS": []
+}

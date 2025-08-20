@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\CustomHeaders">
+      <UniqueIdentifier>{94373174-b312-4ed4-821c-dc69c6a08089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Example Files">
+      <UniqueIdentifier>{fb039081-b4ee-4644-8c72-9677637ef321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Helpers">
+      <UniqueIdentifier>{ce070efd-e06a-49da-9a05-3b9d7c725015}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main_app.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="generic_menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="starting_menu_frame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vocab_menu_frame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="example.cpp">
+      <Filter>Source Files\Example Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_main.cpp">
+      <Filter>Source Files\Example Files</Filter>
+    </ClCompile>
+    <ClCompile Include="json_config.cpp">
+      <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="json_file_examples.cpp">
+      <Filter>Source Files\Example Files</Filter>
+    </ClCompile>
+    <ClCompile Include="content_menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="edit_word_menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="practice_menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="generic_menu.h">
+      <Filter>Header Files\CustomHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="starting_menu_frame.h">
+      <Filter>Header Files\CustomHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="vocab_menu_frame.h">
+      <Filter>Header Files\CustomHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json_config.h">
+      <Filter>Header Files\CustomHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="content_menu.h">
+      <Filter>Header Files\CustomHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="edit_word_menu.h">
+      <Filter>Header Files\CustomHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="practice_menu.h">
+      <Filter>Header Files\CustomHeaders</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="FinalToDo.txt" />
+  </ItemGroup>
+</Project>

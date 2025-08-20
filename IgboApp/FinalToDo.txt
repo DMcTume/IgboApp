@@ -1,0 +1,4 @@
+1. Add in documentation for all headers and source files
+2. Remove makeNewButton() found in GenericMenu
+3. ContentMenu: only print Exit check if a change was made 
+	(just use a boolean)
