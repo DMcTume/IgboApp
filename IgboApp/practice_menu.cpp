@@ -218,6 +218,36 @@ void PracticeMenu::PresentNewQuestion() {
 	}
 }
 
+/*
+* Restarts the practice session.
+* Used in Reshuffle and ChangeCategory
+*/
+void PracticeMenu::RestartPractice() {
+
+	vector <word_t> temp = curr_dict.at(curr_category);
+	curr_list = temp;
+	used_words = {};
+
+	start_button->SetLabel("Start");
+	start_button->Bind(wxEVT_BUTTON, &PracticeMenu::StartReview, this);
+
+	reshuffle_button->SetLabel("");
+	reshuffle_button->Unbind(wxEVT_BUTTON, &PracticeMenu::ReshuffleWords, this);
+
+	next_button->SetLabel("");
+	// If needed:
+	try {
+		next_button->Unbind(wxEVT_BUTTON, &PracticeMenu::NextWord, this);
+	}
+	catch (const exception) {};
+
+	for (wxButton* button : options) {
+		button->SetBackgroundColour(wxTheColourDatabase->Find("WHITE"));
+		button->SetLabel("");
+	}
+	question_box->SetLabel("Press the small button below to start!");
+}
+
 // Tiny panel methods:
 
 /*
@@ -249,7 +279,6 @@ void PracticeMenu::BackToStart(wxCommandEvent& event) {
 * then it will fail to load and the dialog will close.
 */
 
-// TEST WHAT HAPPENS WHEN YOU CHANGE AFTER USING ALL WORDS
 void PracticeMenu::ChangeCategory(wxCommandEvent& event) {
 
 	wxSingleChoiceDialog* get_category = new wxSingleChoiceDialog(this,
@@ -261,13 +290,16 @@ void PracticeMenu::ChangeCategory(wxCommandEvent& event) {
 		string temp_category = (string) get_category->GetStringSelection();
 		vector <word_t> temp_list = curr_dict.at(temp_category);
 
-		if (temp_list.size() < MIN_WORDS) {
+		if (temp_category == curr_category) {
+			wxLogMessage("Category is already in play, try again!");
+		}
+		else if (temp_list.size() < MIN_WORDS) {
 			wxLogMessage("Sorry, the selected category needs at least 4 words to practice with!\n"
 				"This can be changed in the Vocab Menu's edit features");
 		}
 		else {
 			this->curr_category = temp_category;
-			this->curr_list = temp_list;
+			PracticeMenu::RestartPractice();
 		}
 
 		get_category->Destroy();
@@ -333,22 +365,7 @@ void PracticeMenu::ReshuffleWords(wxCommandEvent& event) {
 		"It will reset your current streak!", "RESTART PROMPTED", wxYES_NO);
 
 	if (check->ShowModal() == wxID_YES) {
-		vector <word_t> temp = curr_dict.at(curr_category);
-		curr_list = temp;
-		used_words = {};
-
-		start_button->SetLabel("Start");
-		start_button->Bind(wxEVT_BUTTON, &PracticeMenu::StartReview, this);
-
-		reshuffle_button->SetLabel("");
-		reshuffle_button->Unbind(wxEVT_BUTTON, &PracticeMenu::ReshuffleWords, this);
-
-		next_button->SetLabel("");
-		// If needed:
-		try {
-			next_button->Unbind(wxEVT_BUTTON, &PracticeMenu::NextWord, this);
-		}
-		catch (const exception) {};
+		PracticeMenu::RestartPractice();
 	}
 	check->Destroy();
 

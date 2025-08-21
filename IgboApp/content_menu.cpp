@@ -14,6 +14,7 @@ ContentMenu::ContentMenu(const char *menu_name,
 	this->category = category;
 	this->curr_dict = curr_dict;
 	this->dict_update_required = false;
+	this->changes_made = false;
 
 	// Main Top Panel
 	
@@ -137,10 +138,25 @@ ContentMenu::ContentMenu(const char *menu_name,
 */
 void ContentMenu::GoBackToVocab(wxCommandEvent& event) {
 	
-	wxMessageDialog* exit_check = new wxMessageDialog(this, "Are you sure you want to exit without pushing changes?",
-		"CHANGES UNSAVED", wxYES_NO);
+	if (changes_made) {
+		wxMessageDialog* exit_check = new wxMessageDialog(this, "Are you sure you want to exit without pushing changes?",
+			"CHANGES UNSAVED", wxYES_NO);
 
-	if (exit_check->ShowModal() == wxID_YES) {
+		if (exit_check->ShowModal() == wxID_YES) {
+			int x, y;
+			this->GetPosition(&x, &y);
+
+			VocabMenu* frame = new VocabMenu();
+			frame->SetPosition(wxPoint(x, y));
+			frame->Show();
+			this->Destroy();
+		}
+		else {
+			// pass
+		}
+		exit_check->Destroy();
+	}
+	else {
 		int x, y;
 		this->GetPosition(&x, &y);
 
@@ -149,10 +165,6 @@ void ContentMenu::GoBackToVocab(wxCommandEvent& event) {
 		frame->Show();
 		this->Destroy();
 	}
-	else {
-		// pass
-	}
-	exit_check->Destroy();
 }
 
 /*
@@ -161,10 +173,25 @@ void ContentMenu::GoBackToVocab(wxCommandEvent& event) {
 */
 void ContentMenu::GoBackToMainMenu(wxCommandEvent& event) {
 	
-	wxMessageDialog* exit_check = new wxMessageDialog(this, "Are you sure you want to exit without pushing changes?",
-		"CHANGES UNSAVED", wxYES_NO);
+	if (changes_made) {
+		wxMessageDialog* exit_check = new wxMessageDialog(this, "Are you sure you want to exit without pushing changes?",
+			"CHANGES UNSAVED", wxYES_NO);
 
-	if (exit_check->ShowModal() == wxID_YES) {
+		if (exit_check->ShowModal() == wxID_YES) {
+			int x, y;
+			this->GetPosition(&x, &y);
+
+			StartingMenu* frame = new StartingMenu();
+			frame->SetPosition(wxPoint(x, y));
+			frame->Show();
+			this->Destroy();
+		}
+		else {
+			// pass
+		}
+		exit_check->Destroy();
+	}
+	else {
 		int x, y;
 		this->GetPosition(&x, &y);
 
@@ -173,10 +200,6 @@ void ContentMenu::GoBackToMainMenu(wxCommandEvent& event) {
 		frame->Show();
 		this->Destroy();
 	}
-	else {
-		// pass
-	}
-	exit_check->Destroy();
 }
 
 // Functions for ListBox
@@ -286,26 +309,26 @@ void ContentMenu::AddWord(wxCommandEvent& event) {
 	EditWordMenu* dialog = new EditWordMenu(&new_word_name, &new_definition);
 	if (dialog->ShowModal() == wxID_OK) {
 		dialog->Destroy();
+		word_t new_word = { new_word_name, new_definition, "blank img", "blank ex" };
+
+		vector<word_t> word_list = curr_dict.at(category);
+		int new_index = word_list.size();
+
+		// Search for duplicates before adding
+
+		for (word_t word : word_list) {
+			if (word.word == new_word_name) {
+				wxLogMessage("Word already found in list!");
+				return;
+			}
+		}
+
+		curr_dict.at(category)[new_index] = new_word;
+		changes_made = true;
 	}
 	else {
 		dialog->Destroy();
 	}
-	
-	word_t new_word = { new_word_name, new_definition, "blank img", "blank ex" };
-	
-	vector<word_t> word_list = curr_dict.at(category);
-	int new_index = word_list.size();
-
-	// Search for duplicates before adding
-
-	for (word_t word : word_list) {
-		if (word.word == new_word_name) {
-			wxLogMessage("Word already found in list!");
-			return;
-		}
-	}
-
-	curr_dict.at(category)[new_index] = new_word;
 }
 
 /*
@@ -355,6 +378,7 @@ void ContentMenu::EditWord(wxCommandEvent& event) {
 			curr_dict.at(category)[found_index] = word_info;
 
 			*info_box << "Edited word was placed at the bottom of the list!";
+			changes_made = true;
 		}
 	}
 	else {
@@ -397,6 +421,7 @@ void ContentMenu::DeleteWord(wxCommandEvent& event) {
 		search_list->Delete(word_index);
 		cat_list.erase(word_iter);
 		curr_dict.at(category) = cat_list;
+		changes_made = true;
 	}
 	else {
 		// pass
@@ -449,6 +474,7 @@ void ContentMenu::PushChanges(wxCommandEvent& event) {
 		remove(backup_path.c_str());
 		main_file.close();
 		wxLogMessage("Successfully wrote changes!");
+		changes_made = false;
 	}
 	catch (const exception& e) {
 		wxLogMessage(e.what());

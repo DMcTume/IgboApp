@@ -108,6 +108,9 @@ public:
 
 	// "Randomizes" the board; for each new question
 	void PresentNewQuestion(); 
+
+	// Restarts the practice session
+	void RestartPractice();
 };
 
 #endif

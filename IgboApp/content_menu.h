@@ -79,6 +79,7 @@ private:
 
 	string category;
 	bool dict_update_required; 
+	bool changes_made;
 	json curr_dict;
 	string dict_path = IGBO_DICT_DIR;
 	string backup_path = IGBO_BACKUP_DIR;
