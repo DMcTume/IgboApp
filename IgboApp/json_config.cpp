@@ -1,8 +1,11 @@
 #include "json_config.h"
 #include <iostream>
 
-// LogMessages exist for debugging purposes
-
+/*
+* Opens the file at the path with the given mode and 
+* updates the given file object.
+* Returns non-zero upon encountering an error.
+*/
 int open_JSON(fstream* file, string path, char mode) {
 
 	if (file->is_open()) {
@@ -18,34 +21,33 @@ int open_JSON(fstream* file, string path, char mode) {
 			file->open(path, ios::out);
 		}
 		else {
-			// wxLogMessage("From open_file(): open mode is invalid");
 			return OPEN_ERROR;
 		}
 	}
 
 	catch (const exception& e) {
-		/*stringstream ss;
-		ss << "From open_file() of: " << path << " " << e.what();
-		string error_msg = ss.str();
-
-		wxLogMessage(error_msg)*/
 		return OPEN_ERROR;
 	}
 
 	if (file->fail()) {
-		//wxLogMessage("From open_file(): " + path + " opened in poor state");
 		file->close();
 		return OPEN_ERROR;
 	}
 
 	if (!file->is_open()) {
-		// wxLogMessage("From open_file(): could not open " + path);
 		return OPEN_ERROR;
 	}
 
 	return OPEN_SUCCESS;
 }
 
+/*
+* Creates a backup for the original file using both original's and backup's paths,
+* updating their file objects accordingly.
+* Reminder that this method should be called BEFORE attempting to write to the original
+* (because when the original is opened for writing, all the data will be lost).
+* Returns non-zero upon encountering an error.
+*/
 int create_backup(fstream* original, fstream* backup,
 				  string original_path, string backup_path) {
 	try {
@@ -64,7 +66,6 @@ int create_backup(fstream* original, fstream* backup,
 		*backup << ORIGINAL_DICT.dump(2);
 
 		original->close();
-		// backup->close(); keep open for potential writing errors
 	}
 	catch (const exception& e) {
 		stringstream ss;

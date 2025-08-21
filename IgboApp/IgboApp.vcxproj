@@ -133,8 +133,6 @@
   <ItemGroup>
     <ClCompile Include="content_menu.cpp" />
     <ClCompile Include="edit_word_menu.cpp" />
-    <ClCompile Include="example.cpp" />
-    <ClCompile Include="json_file_examples.cpp" />
     <ClCompile Include="main_app.cpp" />
     <ClCompile Include="generic_menu.cpp" />
     <ClInclude Include="content_menu.h" />
@@ -143,7 +141,6 @@
     <ClCompile Include="json_config.cpp" />
     <ClCompile Include="practice_menu.cpp" />
     <ClCompile Include="starting_menu_frame.cpp" />
-    <ClCompile Include="test_main.cpp" />
     <ClCompile Include="vocab_menu_frame.cpp" />
   </ItemGroup>
   <ItemGroup>

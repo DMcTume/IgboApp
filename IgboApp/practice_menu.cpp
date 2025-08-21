@@ -6,6 +6,15 @@
 #include <ctime>
 #include <cstdlib>
 
+/*
+* Firstly, the frame attempts to load in the dictionary's json. If it cannot be loaded
+* in, the user is left on the StartingMenu.
+* 
+* Additionally, the frame checks if the chosen category from the StartingMenu
+* has at least 4 words (because there must be at least four options available).
+* If the category is not big enough, then the frame will not successfully open and the
+* user will left on the StartingMenu.
+*/
 PracticeMenu::PracticeMenu(string curr_category) : 
 	GenericMenuFrame("Practice Menu", 845, 520) {
 
@@ -54,8 +63,6 @@ PracticeMenu::PracticeMenu(string curr_category) :
 
 	this->curr_category = curr_category;
 	this->getPanel()->SetBackgroundColour(wxTheColourDatabase->Find("TAN"));
-
-	// ERROR SOMEWHERE BELOW THIS LINE
 
 	// TOP TINY PANEL:
 	tiny_panel = new wxPanel(this->getPanel(), wxID_ANY, wxDefaultPosition,
@@ -139,7 +146,12 @@ PracticeMenu::PracticeMenu(string curr_category) :
 
 // Helpers:
 
-int* PracticeMenu::GenerateRandomNums() {
+/*
+* This function finds four indices from the curr_list that have not been used
+* (indices whose words are not already in used_words).
+* It returns an allocated array of the indices that are found.
+*/
+int* PracticeMenu::GenerateRandomIndices() {
 	srand(time(NULL));
 
 	int* random_nums = new int[NUM_OPTIONS] {-1, -1, -1, -1};
@@ -177,8 +189,14 @@ int* PracticeMenu::GenerateRandomNums() {
 	return random_nums;
 }
 
+/*
+* This function "randomizes" the board by randomly choosing one of four words
+* chosen by GenerateRandomIndices. 
+* It then fills the answer board (randomly) with four possible answers (only one
+* of which is correct, of course).
+*/
 void PracticeMenu::PresentNewQuestion() {
-	int* rand_nums = this->GenerateRandomNums();
+	int* rand_nums = this->GenerateRandomIndices();
 	srand(time(NULL));
 	int chosen_word_index = rand() % NUM_OPTIONS;
 
@@ -202,6 +220,10 @@ void PracticeMenu::PresentNewQuestion() {
 
 // Tiny panel methods:
 
+/*
+* Returns sthe user to the starting menu,
+* upon additional affirmation.
+*/
 void PracticeMenu::BackToStart(wxCommandEvent& event) {
 	wxMessageDialog* exit_check = new wxMessageDialog(this, "Are you sure you want to exit practice?",
 		"EGRESS INITIATED", wxYES_NO);
@@ -221,6 +243,13 @@ void PracticeMenu::BackToStart(wxCommandEvent& event) {
 	exit_check->Destroy();
 }
 
+/*
+* Changes the current part of speech.
+* If the new category selected has fewer than 4 words, 
+* then it will fail to load and the dialog will close.
+*/
+
+// TEST WHAT HAPPENS WHEN YOU CHANGE AFTER USING ALL WORDS
 void PracticeMenu::ChangeCategory(wxCommandEvent& event) {
 
 	wxSingleChoiceDialog* get_category = new wxSingleChoiceDialog(this,
@@ -250,6 +279,10 @@ void PracticeMenu::ChangeCategory(wxCommandEvent& event) {
 
 // Button panel methods:
 
+/*
+* Starts the review by presenting a new question,
+* disabling the start button, and presenting the reshuffle button.
+*/
 void PracticeMenu::StartReview(wxCommandEvent& event) {
 
 	this->PresentNewQuestion();
@@ -262,6 +295,12 @@ void PracticeMenu::StartReview(wxCommandEvent& event) {
 	reshuffle_button->Bind(wxEVT_BUTTON, &PracticeMenu::ReshuffleWords, this);
 }
 
+/*
+* Presents a new question after answering an old question.
+* Because words may be marked as used and removed from the current
+* list of available words, if the amount of words available becomes less than
+* 4, than the user will prompted to reshuffle or choose another category.
+*/
 void PracticeMenu::NextWord(wxCommandEvent& event) {
 	
 	for (wxButton* button : options) {
@@ -276,13 +315,18 @@ void PracticeMenu::NextWord(wxCommandEvent& event) {
 
 	if (curr_list.size() < NUM_OPTIONS) {
 		wxLogMessage("Ran out of new words to practice with!\n"
-					"Reshuffle to practice some more or choose to exit...");
+					"Reshuffle or choose another category to practice some more...");
 	}
 	else {
 		this->PresentNewQuestion();
 	}
 }
 
+/*
+* Restarts the user's current streak.
+* In other words, makes all used words available again and allows the user
+* to restart practice.
+*/
 void PracticeMenu::ReshuffleWords(wxCommandEvent& event) {
 
 	wxMessageDialog* check = new wxMessageDialog(this, "Are you sure you want to reshuffle?\n"
@@ -316,11 +360,20 @@ void PracticeMenu::ReshuffleWords(wxCommandEvent& event) {
 
 // Answer panel methods:
 
+/*
+* Clicking an answer buttons submits its content as an answer.
+* Furthermore, if the answer was correct, than that word won't show up again in practice
+* (it's marked as "used").
+*/
 void PracticeMenu::SubmitChoice(wxCommandEvent& event) {
 	string submission = (string)((wxButton*)event.GetEventObject())->GetLabel();
 	
 	if (submission == current_word.definition) {
 		question_box->SetLabel(question_box->GetLabel() + "\n Correct!");
+		
+		// Move past word into used_words, remove from curr_list
+		used_words.push_back(current_word);
+		curr_list.erase(curr_list.begin() + current_word_index);
 	}
 	else {
 		question_box->SetLabel(question_box->GetLabel() + "\n Incorrect! \n" 
@@ -338,9 +391,4 @@ void PracticeMenu::SubmitChoice(wxCommandEvent& event) {
 		next_button->SetLabel("Next Word");
 		next_button->Bind(wxEVT_BUTTON, &PracticeMenu::NextWord, this);
 	}
-
-	// Move past word into used_words, remove from curr_list
-
-	used_words.push_back(current_word);
-	curr_list.erase(curr_list.begin() + current_word_index);
 }

@@ -16,9 +16,6 @@
     <Filter Include="Header Files\CustomHeaders">
       <UniqueIdentifier>{94373174-b312-4ed4-821c-dc69c6a08089}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Example Files">
-      <UniqueIdentifier>{fb039081-b4ee-4644-8c72-9677637ef321}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Helpers">
       <UniqueIdentifier>{ce070efd-e06a-49da-9a05-3b9d7c725015}</UniqueIdentifier>
     </Filter>
@@ -36,17 +33,8 @@
     <ClCompile Include="vocab_menu_frame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="example.cpp">
-      <Filter>Source Files\Example Files</Filter>
-    </ClCompile>
-    <ClCompile Include="test_main.cpp">
-      <Filter>Source Files\Example Files</Filter>
-    </ClCompile>
     <ClCompile Include="json_config.cpp">
       <Filter>Source Files\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="json_file_examples.cpp">
-      <Filter>Source Files\Example Files</Filter>
     </ClCompile>
     <ClCompile Include="content_menu.cpp">
       <Filter>Source Files</Filter>

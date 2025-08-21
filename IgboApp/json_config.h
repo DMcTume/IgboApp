@@ -1,10 +1,19 @@
+/*
+* This file includes libraries and features
+* necessary for working with the dictionary's json, specifically
+* serialization for word structures, file handling methods, and 
+* paths for files (that last one may change in the future).
+* Note that whenever json.hpp is needed (such as for json objects), 
+* this libaray is included instead because json.hpp lacks header guards.
+*/
+
 #pragma once
 
 #ifndef JSON_CONFIG
 #define JSON_CONFIG
 
 #include <wx/wx.h> // including after other libraries causes deprecation errors
-#include "json.hpp" // includes <string>
+#include "json.hpp"
 #include <fstream>
 #include <sstream>
 
@@ -60,15 +69,14 @@ namespace nlohmann {
 	};
 }
 
-// Makes opening files more convenient:
-
+/*
+ * Opens the json file for whatever mode is indicated.
+ */
 int open_JSON(fstream* file, string path, char mode);
 
-// Makes creating backups easier:
 /*
-* This function must be run BEFORE opening original file
+* Facilitates creating backups for files.
 */
-
 int create_backup(fstream *original, fstream *backup,
 				  string original_path, string backup_path);
 

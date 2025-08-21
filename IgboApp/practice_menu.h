@@ -1,3 +1,9 @@
+/*
+* This frame allows the user to practice matching words with their definitions
+* (and will include other forms of matching in the future).
+* The design is very similar to Kahoot's interface.
+*/
+
 #pragma once
 #ifndef PRACTICE_MENU
 #define PRACTICE_MENU
@@ -18,23 +24,6 @@
 #define PRACTICE_BUTTON_WIDTH (100)
 
 class PracticeMenu : public GenericMenuFrame {
-
-	/*
-	* Flow of control (using mini menus, if possible):
-	* Starting menu -> opens up this frame
-	* Language selection -> file selection menu (FOR THE FUTURE)
-	* Part of speech selection -> small drop down
-	* Open practice menu
-	*/
-
-	/*
-	* (FOR THE FUTURE:)
-	* To record (possibly on file):
-	* - Which categories/words are the hardest
-	* - Frequency of certain words (could be used to make practice more effective)
-	* - "Tag" system: select which words you want to see again
-	* - Add in not just Word to Definition, but Definition to Word AND Mixed Mode
-	*/
 
 private:
 	string curr_dict_path = IGBO_DICT_DIR;
@@ -94,19 +83,31 @@ private:
 public:
 	PracticeMenu(string curr_category);
 
+	// Returns to the StartingMenu
 	void BackToStart(wxCommandEvent& event);
+
+	// Changes the current part of speech
 	void ChangeCategory(wxCommandEvent& event);
 
+	// Initiates review (starts a new streak)
 	void StartReview(wxCommandEvent& event);
+
+	// Resets the review (ends the current streak so the user can start a new one)
 	void ReshuffleWords(wxCommandEvent& event);
+
+	// Moves on the next word after the answer is revealed
 	void NextWord(wxCommandEvent& event);
 
+	// Submits the clicked option as the user's answer
 	void SubmitChoice(wxCommandEvent& event);
 
 	// Helpers:
 
-	int* GenerateRandomNums(); // finds 4 random indices
-	void PresentNewQuestion(); // randomizes the board
+	// Finds four random indices from the current list of words
+	int* GenerateRandomIndices(); 
+
+	// "Randomizes" the board; for each new question
+	void PresentNewQuestion(); 
 };
 
 #endif

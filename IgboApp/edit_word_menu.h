@@ -1,3 +1,9 @@
+/*
+* This small dialog window allows the user to add
+* and edit words in the dictionary.
+* It provides fields where they can input their changes.
+*/
+
 #pragma once
 
 #ifndef EDIT_WORD_MENU
@@ -9,11 +15,6 @@ using namespace std;
 
 #define WINDOW_WIDTH (250)
 #define WINDOW_HEIGHT (250)
-
-/*
-* Fix this window so that it actually closes
-* Look up "wxDialog not closing on exit"
-*/
 
 class EditWordMenu : public wxDialog {
 
@@ -43,12 +44,19 @@ private:
 
 public:
 
-	// Changes the strings passed to it from previous menu
+	/*
+	* The constructor takes the addresses of the attributes of a word 
+	* structure. That word is then added to or changed in the dictionary.
+	*/
 	EditWordMenu(string *word_name, string *definition);
 
+	// Closes the window with the changes made
 	void OnOK(wxCommandEvent& event);
+
+	// Closes the window without making changes
 	void OnCancel(wxCommandEvent& event);
 
+	// Closes the window with the changes made
 	void SubmitEdit(wxCommandEvent& event);
 };
 
