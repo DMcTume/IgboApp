@@ -12,7 +12,6 @@
 
 #include "generic_menu.h"
 #include "json_config.h"
-#include <unordered_map>
 
 #define TOP_PANEL_PROPORTION (3)
 #define BOTTOM_PANEL_PROPORTION (7)
@@ -28,8 +27,6 @@
 #define SEARCH_LIST_HEIGHT (300)
 
 #define NUM_IGBO_SPECIAL_CHARS (4)
-#define UPPERCASE (0)
-#define LOWERCASE (1)
 
 class ContentMenu : public GenericMenuFrame {
 
@@ -86,11 +83,16 @@ private:
 	wxButton* capitalization_button;
 	bool using_uppercase = true;
 	
-	const map<string, array<const wchar_t *, 2>> igbo_special_chars = {
-		{"I_UNDERDOT", {L"\u1ECA", L"\u1ECB"}},
-		{"O_UNDERDOT", {L"\u1ECC", L"\u1ECD"}},
-		{"U_UNDERDOT", {L"\u1EE4", L"\u1EE5"}},
-		{"N_NASAL", {L"\u1E44", L"\u1E45"}}
+	typedef struct special_char_struct {
+		const wchar_t* uppercase;
+		const wchar_t* lowercase;
+	} special_char;
+
+	map<string, special_char> igbo_special_chars = {
+		{"I_UNDERDOT", special_char{L"\u1ECA", L"\u1ECB"}},
+		{"O_UNDERDOT", special_char{L"\u1ECC", L"\u1ECD"}},
+		{"U_UNDERDOT", special_char{L"\u1EE4", L"\u1EE5"}},
+		{"N_NASAL", special_char{L"\u1E44", L"\u1E45"}}
 	};
 
 	// Other Non-Component Values

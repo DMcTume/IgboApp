@@ -123,7 +123,7 @@ ContentMenu::ContentMenu(const char *menu_name,
 
 	int button_index = 0;
 	for (const auto& pair : igbo_special_chars) {
-		special_char_buttons[button_index] = new wxButton(bottom_panel, wxID_ANY, pair.second[UPPERCASE]);
+		special_char_buttons[button_index] = new wxButton(bottom_panel, wxID_ANY, pair.second.lowercase);
 		special_char_buttons[button_index]->Bind(wxEVT_BUTTON, &ContentMenu::InsertSpecialChar, this);
 		special_char_box->Add(special_char_buttons[button_index]);
 		button_index++;
@@ -457,6 +457,11 @@ void ContentMenu::PushChanges(wxCommandEvent& event) {
 	fstream main_file;
 	fstream backup_file;
 
+	if (!changes_made) {
+		wxLogMessage("You've yet to make any changes!");
+		return;
+	}
+
 	wxMessageDialog* confirm = new wxMessageDialog(this,
 		"Are you sure you want to push changes to file? ALL CHANGES ARE PERMANENT\n"
 		"Additionally, your changes will not be saved upon error",
@@ -518,6 +523,7 @@ void ContentMenu::PushChanges(wxCommandEvent& event) {
 void ContentMenu::InsertSpecialChar(wxCommandEvent& event) {
 	wxString char_selected = ((wxButton*)event.GetEventObject())->GetLabel();
 	wxString user_input_str = user_input->GetValue();
+
 	if (user_input_str == "Search for word here") {
 		user_input->SetValue(char_selected);
 	}
@@ -531,10 +537,10 @@ void ContentMenu::ToggleCaps(wxCommandEvent& event) {
 
 	for (const auto& pair : igbo_special_chars) {
 		if (using_uppercase) {
-			special_char_buttons[button_index]->SetLabel(pair.second[LOWERCASE]);
+			special_char_buttons[button_index]->SetLabel(pair.second.lowercase);
 		}
 		else {
-			special_char_buttons[button_index]->SetLabel(pair.second[UPPERCASE]);
+			special_char_buttons[button_index]->SetLabel(pair.second.uppercase);
 		}
 		button_index++;
 	}

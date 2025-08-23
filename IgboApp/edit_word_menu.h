@@ -11,10 +11,15 @@
 
 #include "wx/wx.h"
 #include <string>
+#include <map>
+
 using namespace std;
 
 #define WINDOW_WIDTH (250)
 #define WINDOW_HEIGHT (250)
+
+#define UPPERCASE (0)
+#define LOWERCASE (1)
 
 class EditWordMenu : public wxDialog {
 
@@ -48,6 +53,9 @@ public:
 	* The constructor takes the addresses of the attributes of a word 
 	* structure. That word is then added to or changed in the dictionary.
 	*/
+	//EditWordMenu(string *word_name, string *definition,
+	//	map<string, WordValue> *special_chars);
+
 	EditWordMenu(string *word_name, string *definition);
 
 	// Closes the window with the changes made
