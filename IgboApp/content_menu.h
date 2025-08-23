@@ -12,6 +12,7 @@
 
 #include "generic_menu.h"
 #include "json_config.h"
+#include <unordered_map>
 
 #define TOP_PANEL_PROPORTION (3)
 #define BOTTOM_PANEL_PROPORTION (7)
@@ -23,16 +24,14 @@
 #define TEXT_BOX_HEIGHT (40)
 #define TEXT_FONT_SCALE (1.1)
 
-// NOTE: components on the bottom combine above consts and hard-coded ones
-// Change that eventually to make it cleaner
-
 #define SEARCH_LIST_WIDTH (450)
 #define SEARCH_LIST_HEIGHT (300)
 
-class ContentMenu : public GenericMenuFrame {
+#define NUM_IGBO_SPECIAL_CHARS (4)
+#define UPPERCASE (0)
+#define LOWERCASE (1)
 
-	// Think about adding an option to see all current
-	// Changes made before pushing
+class ContentMenu : public GenericMenuFrame {
 
 private: 
 	wxSizerFlags default_flags = wxSizerFlags().
@@ -47,11 +46,17 @@ private:
 	wxSizerFlags top_sub_panel_flags = wxSizerFlags().
 		Expand().Proportion(1);
 
+	wxSizerFlags search_list_flags = wxSizerFlags().Center().
+		Border(wxALL, 2).Proportion(3);
+
+	wxSizerFlags special_char_flags = wxSizerFlags().Center().
+		Border(wxALL, 2).Proportion(1);
+
 	// Top Components:
 	wxPanel* top_panel;
 	wxBoxSizer* top_sizer;
 
-	wxPanel* back_buttons_panel; // NOTE: DEFAULT SIZES MIGHT NEED TO CHANGE
+	wxPanel* back_buttons_panel;
 	wxPanel* text_box_panel;
 	wxPanel* toggle_options_panel;
 
@@ -75,6 +80,19 @@ private:
 	wxTextCtrl* user_input;
 	wxListBox* search_list;
 
+	// Include a captialize button or something to get capital letters
+	wxGridSizer* special_char_box;
+	wxButton* special_char_buttons[NUM_IGBO_SPECIAL_CHARS];
+	wxButton* capitalization_button;
+	bool using_uppercase = true;
+	
+	const map<string, array<const wchar_t *, 2>> igbo_special_chars = {
+		{"I_UNDERDOT", {L"\u1ECA", L"\u1ECB"}},
+		{"O_UNDERDOT", {L"\u1ECC", L"\u1ECD"}},
+		{"U_UNDERDOT", {L"\u1EE4", L"\u1EE5"}},
+		{"N_NASAL", {L"\u1E44", L"\u1E45"}}
+	};
+
 	// Other Non-Component Values
 
 	string category;
@@ -83,11 +101,6 @@ private:
 	json curr_dict;
 	string dict_path = IGBO_DICT_DIR;
 	string backup_path = IGBO_BACKUP_DIR;
-
-	// Events:
-	// Though other methods may edit curr_dict,
-	// Changes are only pushed when one of the back buttons are chosen
-	// Or when the push change button is selected
 
 	/*
 	* Returns to VocabMenu (part of speech selection)
@@ -118,6 +131,10 @@ private:
 
 	// Save your changes by writing them to the dictionary
 	void PushChanges(wxCommandEvent& event);
+
+	void InsertSpecialChar(wxCommandEvent& event);
+
+	void ToggleCaps(wxCommandEvent& event);
 
 public:
 	ContentMenu(const char *menu_name, 

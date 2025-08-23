@@ -114,9 +114,24 @@ ContentMenu::ContentMenu(const char *menu_name,
 	bottom_sizer->Add(user_input, default_flags);
 
 	search_list = new wxListBox(bottom_panel, wxID_ANY, wxDefaultPosition,
-		wxSize(SEARCH_LIST_WIDTH, SEARCH_LIST_HEIGHT), 0, NULL,
+		wxSize(SEARCH_LIST_WIDTH, -1), 0, NULL,
 		wxLB_NEEDED_SB | wxLB_SORT);
-	bottom_sizer->Add(search_list, default_flags);
+	bottom_sizer->Add(search_list, search_list_flags);
+
+	special_char_box = new wxGridSizer(NUM_IGBO_SPECIAL_CHARS);
+	bottom_sizer->Add(special_char_box, special_char_flags);
+
+	int button_index = 0;
+	for (const auto& pair : igbo_special_chars) {
+		special_char_buttons[button_index] = new wxButton(bottom_panel, wxID_ANY, pair.second[UPPERCASE]);
+		special_char_buttons[button_index]->Bind(wxEVT_BUTTON, &ContentMenu::InsertSpecialChar, this);
+		special_char_box->Add(special_char_buttons[button_index]);
+		button_index++;
+	}
+
+	capitalization_button = new wxButton(bottom_panel, wxID_ANY, "Toggle Capitalization");
+	capitalization_button->Bind(wxEVT_BUTTON, &ContentMenu::ToggleCaps, this);
+	bottom_sizer->Add(capitalization_button, default_flags);
 
 	getBoxSizer()->Add(top_panel, top_panel_flags);
 	getBoxSizer()->Add(bottom_panel, bottom_panel_flags);
@@ -499,3 +514,35 @@ void ContentMenu::PushChanges(wxCommandEvent& event) {
 	}
 }
 
+
+void ContentMenu::InsertSpecialChar(wxCommandEvent& event) {
+	wxString char_selected = ((wxButton*)event.GetEventObject())->GetLabel();
+	wxString user_input_str = user_input->GetValue();
+	if (user_input_str == "Search for word here") {
+		user_input->SetValue(char_selected);
+	}
+	else {
+		user_input->SetValue(user_input_str + char_selected);
+	}
+}
+
+void ContentMenu::ToggleCaps(wxCommandEvent& event) {
+	int button_index = 0;
+
+	for (const auto& pair : igbo_special_chars) {
+		if (using_uppercase) {
+			special_char_buttons[button_index]->SetLabel(pair.second[LOWERCASE]);
+		}
+		else {
+			special_char_buttons[button_index]->SetLabel(pair.second[UPPERCASE]);
+		}
+		button_index++;
+	}
+
+	if (using_uppercase) {
+		using_uppercase = false;
+	}
+	else {
+		using_uppercase = true;
+	}
+}
