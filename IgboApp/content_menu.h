@@ -82,7 +82,6 @@ private:
 	wxTextCtrl* user_input;
 	wxListBox* search_list;
 
-	// Include a captialize button or something to get capital letters
 	wxGridSizer* special_char_box;
 	wxButton* special_char_buttons[NUM_IGBO_SPECIAL_CHARS];
 	wxButton* capitalization_button;
@@ -134,6 +133,7 @@ private:
 	// Save your changes by writing them to the dictionary
 	void PushChanges(wxCommandEvent& event);
 
+	// So user can insert special chars
 	void InsertSpecialChar(wxCommandEvent& event);
 
 	void ToggleCaps(wxCommandEvent& event);
