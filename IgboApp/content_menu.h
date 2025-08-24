@@ -28,6 +28,11 @@
 
 #define NUM_IGBO_SPECIAL_CHARS (4)
 
+typedef struct special_char_struct {
+	const wchar_t* uppercase;
+	const wchar_t* lowercase;
+} special_char;
+
 class ContentMenu : public GenericMenuFrame {
 
 private: 
@@ -81,13 +86,8 @@ private:
 	wxGridSizer* special_char_box;
 	wxButton* special_char_buttons[NUM_IGBO_SPECIAL_CHARS];
 	wxButton* capitalization_button;
-	bool using_uppercase = true;
+	bool using_uppercase = false;
 	
-	typedef struct special_char_struct {
-		const wchar_t* uppercase;
-		const wchar_t* lowercase;
-	} special_char;
-
 	map<string, special_char> igbo_special_chars = {
 		{"I_UNDERDOT", special_char{L"\u1ECA", L"\u1ECB"}},
 		{"O_UNDERDOT", special_char{L"\u1ECC", L"\u1ECD"}},

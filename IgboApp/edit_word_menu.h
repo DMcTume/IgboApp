@@ -10,16 +10,14 @@
 #define EDIT_WORD_MENU
 
 #include "wx/wx.h"
+#include "content_menu.h" // for the special_char struct
 #include <string>
 #include <map>
 
 using namespace std;
 
-#define WINDOW_WIDTH (250)
+#define WINDOW_WIDTH (300)
 #define WINDOW_HEIGHT (250)
-
-#define UPPERCASE (0)
-#define LOWERCASE (1)
 
 class EditWordMenu : public wxDialog {
 
@@ -42,10 +40,17 @@ private:
 
 	wxButton* submit_button;
 
+	wxGridSizer* special_char_grid;
+	wxButton* special_char_buttons[NUM_IGBO_SPECIAL_CHARS];
+	wxButton* caps_button;
+	bool using_uppercase = false;
+
 	// Constructor Params
 
 	string* word_name;
 	string* definition;
+	map<string, special_char> special_char_map;
+	wxTextCtrl* selected_entry; // for knowing where to insert char
 
 public:
 
@@ -53,10 +58,8 @@ public:
 	* The constructor takes the addresses of the attributes of a word 
 	* structure. That word is then added to or changed in the dictionary.
 	*/
-	//EditWordMenu(string *word_name, string *definition,
-	//	map<string, WordValue> *special_chars);
-
-	EditWordMenu(string *word_name, string *definition);
+	EditWordMenu(string *word_name, string *definition,
+		map<string, special_char> *special_char_map);
 
 	// Closes the window with the changes made
 	void OnOK(wxCommandEvent& event);
@@ -66,6 +69,10 @@ public:
 
 	// Closes the window with the changes made
 	void SubmitEdit(wxCommandEvent& event);
+
+	void InsertSpecialChar(wxCommandEvent& event);
+
+	void ChangeFocus(wxFocusEvent& event);
 };
 
 #endif

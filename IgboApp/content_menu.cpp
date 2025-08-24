@@ -321,7 +321,8 @@ void ContentMenu::AddWord(wxCommandEvent& event) {
 	string new_word_name;
 	string new_definition;
 
-	EditWordMenu* dialog = new EditWordMenu(&new_word_name, &new_definition);
+	EditWordMenu* dialog = new EditWordMenu(&new_word_name, &new_definition,
+		&igbo_special_chars);
 	if (dialog->ShowModal() == wxID_OK) {
 		dialog->Destroy();
 		word_t new_word = { new_word_name, new_definition, "blank img", "blank ex" };
@@ -372,7 +373,8 @@ void ContentMenu::EditWord(wxCommandEvent& event) {
 	}
 
 	// Have user input from dialog directly change the struct
-	EditWordMenu* dialog = new EditWordMenu( &word_info.word, &word_info.definition);
+	EditWordMenu* dialog = new EditWordMenu( &word_info.word, &word_info.definition,
+		&igbo_special_chars);
 	if (dialog->ShowModal() == wxID_OK) {
 		dialog->Destroy();
 		
