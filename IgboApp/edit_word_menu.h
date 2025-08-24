@@ -17,7 +17,7 @@
 using namespace std;
 
 #define WINDOW_WIDTH (300)
-#define WINDOW_HEIGHT (250)
+#define WINDOW_HEIGHT (350)
 
 class EditWordMenu : public wxDialog {
 
@@ -73,6 +73,8 @@ public:
 	void InsertSpecialChar(wxCommandEvent& event);
 
 	void ChangeFocus(wxFocusEvent& event);
+
+	void ToggleCaps(wxCommandEvent& event);
 };
 
 #endif

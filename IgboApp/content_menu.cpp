@@ -527,11 +527,10 @@ void ContentMenu::InsertSpecialChar(wxCommandEvent& event) {
 	wxString user_input_str = user_input->GetValue();
 
 	if (user_input_str == "Search for word here") {
-		user_input->SetValue(char_selected);
+		user_input->Clear();
 	}
-	else {
-		user_input->SetValue(user_input_str + char_selected);
-	}
+	*user_input << char_selected;
+	user_input->SetFocus(); 
 }
 
 void ContentMenu::ToggleCaps(wxCommandEvent& event) {

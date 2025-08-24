@@ -1,5 +1,7 @@
 #include "edit_word_menu.h"
 
+#include <sstream>
+
 EditWordMenu::EditWordMenu(string *word_name, string *definition,
 	map<string, special_char> *special_char_map) : 
 	wxDialog(NULL, wxID_ANY, (*word_name).c_str()) {
@@ -30,6 +32,7 @@ EditWordMenu::EditWordMenu(string *word_name, string *definition,
 	word_name_entry = new wxTextCtrl(panel, wxID_ANY, *word_name,
 		wxDefaultPosition, wxDefaultSize);
 	word_name_entry->Bind(wxEVT_SET_FOCUS, &EditWordMenu::ChangeFocus, this);
+	word_name_entry->SetFocus();
 
 	definition_text = new wxStaticText(panel, wxID_ANY, "Definition: ",
 		wxDefaultPosition, wxDefaultSize, wxTRANSPARENT_WINDOW);
@@ -62,11 +65,16 @@ EditWordMenu::EditWordMenu(string *word_name, string *definition,
 		it++) {
 		const wchar_t* letter = it->second.lowercase;
 		special_char_buttons[button_index] = new wxButton(panel,
-			wxID_ANY, letter, wxDefaultPosition, wxSize(30, 20));
+			wxID_ANY, letter);
 		special_char_buttons[button_index]->Bind(wxEVT_BUTTON,
 			&EditWordMenu::InsertSpecialChar, this);
 		main_sizer->Add(special_char_buttons[button_index], default_flags);
+		button_index++;
 	}
+
+	caps_button = new wxButton(panel, wxID_ANY, "Toggle Caps");
+	main_sizer->Add(caps_button, default_flags);
+	caps_button->Bind(wxEVT_BUTTON, &EditWordMenu::ToggleCaps, this);
 }
 
 void EditWordMenu::OnOK(wxCommandEvent& event) {
@@ -95,11 +103,36 @@ void EditWordMenu::SubmitEdit(wxCommandEvent& event) {
 
 void EditWordMenu::InsertSpecialChar(wxCommandEvent& event) {
 	wxString char_selected = ((wxButton*)event.GetEventObject())->GetLabel();
-	wxString user_input_str = selected_entry->GetValue();
-
-	selected_entry->SetValue(user_input_str + char_selected);	
+	*selected_entry << char_selected;
+	selected_entry->SetFocus();
 }
 
 void EditWordMenu::ChangeFocus(wxFocusEvent& event) {
 	selected_entry = (wxTextCtrl*)event.GetEventObject();
+}
+
+void EditWordMenu::ToggleCaps(wxCommandEvent& event) {
+	int button_index = 0;
+
+	for (const auto& pair : special_char_map) {
+		if (using_uppercase) {
+			special_char_buttons[button_index]->SetLabel(pair.second.lowercase);
+		}
+		else {
+			special_char_buttons[button_index]->SetLabel(pair.second.uppercase);
+		}
+		button_index++;
+	}
+
+	if (using_uppercase) {
+		using_uppercase = false;
+	}
+	else {
+		using_uppercase = true;
+	}
+	/*stringstream ss;
+	for (wxButton* button : special_char_buttons) {
+		ss << static_cast<void*>(button) << "\n";
+	}
+	wxLogMessage(ss.str());*/
 }
