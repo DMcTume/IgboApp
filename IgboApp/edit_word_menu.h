@@ -70,10 +70,13 @@ public:
 	// Closes the window with the changes made
 	void SubmitEdit(wxCommandEvent& event);
 
+	// So user can insert special chars
 	void InsertSpecialChar(wxCommandEvent& event);
 
+	// Used to keep track of which wxTextCtrl is being used for input
 	void ChangeFocus(wxFocusEvent& event);
 
+	// Toggles capitalization of special chars
 	void ToggleCaps(wxCommandEvent& event);
 };
 

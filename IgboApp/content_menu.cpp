@@ -522,7 +522,9 @@ void ContentMenu::PushChanges(wxCommandEvent& event) {
 	}
 }
 
-
+/*
+* Inserts the selected special char into the user's input
+*/
 void ContentMenu::InsertSpecialChar(wxCommandEvent& event) {
 	wxString char_selected = ((wxButton*)event.GetEventObject())->GetLabel();
 	wxString user_input_str = user_input->GetValue();
@@ -534,6 +536,9 @@ void ContentMenu::InsertSpecialChar(wxCommandEvent& event) {
 	user_input->SetFocus(); 
 }
 
+/*
+* Toggles capitalization of special chars
+*/
 void ContentMenu::ToggleCaps(wxCommandEvent& event) {
 	int button_index = 0;
 

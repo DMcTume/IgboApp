@@ -28,6 +28,11 @@
 
 #define NUM_IGBO_SPECIAL_CHARS (4)
 
+/*
+* Structure to map special chars to string-stored descriptions
+* The mapping is done both for readability and for easy transfer of info
+* to the EditWordMenu
+*/
 typedef struct special_char_struct {
 	const wchar_t* uppercase;
 	const wchar_t* lowercase;
@@ -136,6 +141,7 @@ private:
 	// So user can insert special chars
 	void InsertSpecialChar(wxCommandEvent& event);
 
+	// Toggles capitalization of special chars
 	void ToggleCaps(wxCommandEvent& event);
 
 public:

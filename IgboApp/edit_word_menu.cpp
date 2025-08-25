@@ -86,10 +86,7 @@ void EditWordMenu::OnCancel(wxCommandEvent& event) {
 
 void EditWordMenu::SubmitEdit(wxCommandEvent& event) {
 	
-	//wxString submitted_name = word_name_entry->GetLineText(0);
 	wxString submitted_name = word_name_entry->GetValue();
-
-	//wxString submitted_definition = definition_entry->GetLineText(0).ToAscii();
 	wxString submitted_definition = definition_entry->GetValue();
 
 	*word_name = submitted_name;
@@ -103,16 +100,26 @@ void EditWordMenu::SubmitEdit(wxCommandEvent& event) {
 // might involve having focus instantly change back to the ctrl
 // then placing the cursor at the end of the string
 
+/*
+* Inserts the selected special char into the user's input
+*/
 void EditWordMenu::InsertSpecialChar(wxCommandEvent& event) {
 	wxString char_selected = ((wxButton*)event.GetEventObject())->GetLabel();
 	*selected_entry << char_selected;
 	selected_entry->SetFocus();
 }
 
+/*
+* Used to keep track of which wxTextCtrl is being used for input
+* Very helpful in knowing which input box to insert special chars 
+*/
 void EditWordMenu::ChangeFocus(wxFocusEvent& event) {
 	selected_entry = (wxTextCtrl*)event.GetEventObject();
 }
 
+/*
+* Toggles capitalization of special chars
+*/
 void EditWordMenu::ToggleCaps(wxCommandEvent& event) {
 	int button_index = 0;
 
