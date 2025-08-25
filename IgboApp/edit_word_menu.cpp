@@ -1,8 +1,6 @@
 #include "edit_word_menu.h"
 
-#include <sstream>
-
-EditWordMenu::EditWordMenu(string *word_name, string *definition,
+EditWordMenu::EditWordMenu(wstring *word_name, wstring *definition,
 	map<string, special_char> *special_char_map) : 
 	wxDialog(NULL, wxID_ANY, (*word_name).c_str()) {
 
@@ -33,6 +31,7 @@ EditWordMenu::EditWordMenu(string *word_name, string *definition,
 		wxDefaultPosition, wxDefaultSize);
 	word_name_entry->Bind(wxEVT_SET_FOCUS, &EditWordMenu::ChangeFocus, this);
 	word_name_entry->SetFocus();
+	this->selected_entry = word_name_entry;
 
 	definition_text = new wxStaticText(panel, wxID_ANY, "Definition: ",
 		wxDefaultPosition, wxDefaultSize, wxTRANSPARENT_WINDOW);
@@ -87,8 +86,11 @@ void EditWordMenu::OnCancel(wxCommandEvent& event) {
 
 void EditWordMenu::SubmitEdit(wxCommandEvent& event) {
 	
-	string submitted_name = (string) word_name_entry->GetLineText(0).ToAscii();
-	string submitted_definition = (string) definition_entry->GetLineText(0).ToAscii();
+	//wxString submitted_name = word_name_entry->GetLineText(0);
+	wxString submitted_name = word_name_entry->GetValue();
+
+	//wxString submitted_definition = definition_entry->GetLineText(0).ToAscii();
+	wxString submitted_definition = definition_entry->GetValue();
 
 	*word_name = submitted_name;
 	*definition = submitted_definition;
@@ -130,9 +132,4 @@ void EditWordMenu::ToggleCaps(wxCommandEvent& event) {
 	else {
 		using_uppercase = true;
 	}
-	/*stringstream ss;
-	for (wxButton* button : special_char_buttons) {
-		ss << static_cast<void*>(button) << "\n";
-	}
-	wxLogMessage(ss.str());*/
 }

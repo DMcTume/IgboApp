@@ -1,6 +1,10 @@
 #include "json_config.h"
 #include <iostream>
 
+/// For wstring to utf8 conversion
+#include <codecvt>
+#include <locale>
+
 /*
 * Opens the file at the path with the given mode and 
 * updates the given file object.
@@ -78,4 +82,14 @@ int create_backup(fstream* original, fstream* backup,
 	}
 
 	return BACKUP_SUCCESS;
+}
+
+string wstring_to_utf8(const wstring& wide_string) {
+	static wstring_convert<codecvt_utf8_utf16<wchar_t>> utf8_conv;
+	return utf8_conv.to_bytes(wide_string);
+}
+
+wstring utf8_to_wstring(const string& utf8_string) {
+	static wstring_convert< codecvt_utf8_utf16<wchar_t>> utf8_conv;
+	return utf8_conv.from_bytes(utf8_string);
 }

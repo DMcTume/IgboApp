@@ -31,11 +31,18 @@ using namespace std;
 
 // Structure for serializing
 typedef struct word_structure {
-	string word;
-	string definition;
-	string image;
-	string example;
+	wstring word;
+	wstring definition;
+	string image;  // will likely be a path, so no need for wstring
+  	wstring example;
 } word_t;
+
+// Sources for conversion: DeepSeek and https://json.nlohmann.me/home/faq/#wide-string-handling
+
+string wstring_to_utf8(const wstring& wide_string);
+
+wstring utf8_to_wstring(const string& utf8_string);
+
 
 // Actual serialization:
 namespace nlohmann {
@@ -44,19 +51,19 @@ namespace nlohmann {
 
 		static void to_json(json& j, const word_structure& c) {
 			j = json{
-				{"word", c.word},
-				{"definition", c.definition},
+				{"word", wstring_to_utf8(c.word)},
+				{"definition", wstring_to_utf8(c.definition)},
 				{"image", c.image},
-				{"example", c.example}
+				{"example", wstring_to_utf8(c.example)}
 			};
 		}
 
 		static void from_json(const json& j, word_structure& c) {
 			try {
-				c.word = j.at("word").get<string>();
-				c.definition = j.at("definition").get<string>();
+				c.word = utf8_to_wstring(j.at("word").get<string>());
+				c.definition = utf8_to_wstring(j.at("definition").get<string>());
 				c.image = j.at("image").get<string>();
-				c.example = j.at("example").get<string>();
+				c.example = utf8_to_wstring(j.at("example").get<string>());
 			}
 			catch (const exception& e) {
 				stringstream error_stream;

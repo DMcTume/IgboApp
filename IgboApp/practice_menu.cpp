@@ -203,7 +203,8 @@ void PracticeMenu::PresentNewQuestion() {
 	this->current_word = curr_list.at(rand_nums[chosen_word_index]);
 	this->current_word_index = rand_nums[chosen_word_index];
 	
-	question_box->SetLabel("What is \"" + current_word.word + "\" in English?");
+	question_box->SetLabel(wxString("What is \"") + current_word.word + 
+		wxString("\" in English?"));
 
 	for (int i = 0; i < NUM_OPTIONS; i++) {
 		wxButton* button = options[i];
@@ -383,7 +384,7 @@ void PracticeMenu::ReshuffleWords(wxCommandEvent& event) {
 * (it's marked as "used").
 */
 void PracticeMenu::SubmitChoice(wxCommandEvent& event) {
-	string submission = (string)((wxButton*)event.GetEventObject())->GetLabel();
+	wxString submission = ((wxButton*)event.GetEventObject())->GetLabel();
 	
 	if (submission == current_word.definition) {
 		question_box->SetLabel(question_box->GetLabel() + "\n Correct!");

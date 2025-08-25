@@ -226,7 +226,7 @@ void ContentMenu::GoBackToMainMenu(wxCommandEvent& event) {
 * the ones that require a word to be selected (because this method resets
 * selection).
 */
-void ContentMenu::SearchJSON(wxCommandEvent& event) { // Includes binding for edit button
+void ContentMenu::SearchJSON(wxCommandEvent& event) {
 
 	fstream dict_file;
 	json dict;
@@ -247,7 +247,8 @@ void ContentMenu::SearchJSON(wxCommandEvent& event) { // Includes binding for ed
 
 		vector<word_t> word_list = dict.at(category);
 		
-		string search_word = (string) user_input->GetLineText(0).ToAscii();
+		// wxString search_word = user_input->GetLineText(0); 
+		wxString search_word = user_input->GetValue();
 		if (search_word.empty()) {
 			dict_file.close();
 			
@@ -259,7 +260,7 @@ void ContentMenu::SearchJSON(wxCommandEvent& event) { // Includes binding for ed
 		vector<word_t> matching_words = {};
 
 		for (word_t word : word_list) {
-			if (word.word.find(search_word) != string::npos) {
+			if (word.word.find(search_word) != wstring::npos) {
 				matching_words.push_back(word);
 			}
 		}
@@ -270,7 +271,7 @@ void ContentMenu::SearchJSON(wxCommandEvent& event) { // Includes binding for ed
 		else {
 			search_list->Clear();
 			for (word_t word : matching_words) {
-				search_list->Append(word.word + ": " + word.definition);
+				search_list->Append(word.word + wxString(": ") + word.definition);
 			}
 		}
 
@@ -318,14 +319,14 @@ void ContentMenu::SelectWord(wxCommandEvent& event) {
 * (Other attributes, such as definition, can be matching, however)
 */
 void ContentMenu::AddWord(wxCommandEvent& event) {
-	string new_word_name;
-	string new_definition;
+	wstring new_word_name;
+	wstring new_definition;
 
 	EditWordMenu* dialog = new EditWordMenu(&new_word_name, &new_definition,
 		&igbo_special_chars);
 	if (dialog->ShowModal() == wxID_OK) {
 		dialog->Destroy();
-		word_t new_word = { new_word_name, new_definition, "blank img", "blank ex" };
+		word_t new_word = { new_word_name, new_definition, "blank img", utf8_to_wstring("blank ex") };
 
 		vector<word_t> word_list = curr_dict.at(category);
 		int new_index = word_list.size();
@@ -357,9 +358,9 @@ void ContentMenu::AddWord(wxCommandEvent& event) {
 void ContentMenu::EditWord(wxCommandEvent& event) {
 
 	// Find existing word in json obj
-	string selected_string = (string)search_list->GetString(search_list->GetSelection()).ToAscii();
+	wxString selected_string = search_list->GetString(search_list->GetSelection());
 	int parse_marker = selected_string.find(":");
-	string selected_word = selected_string.substr(0, parse_marker);
+	wxString selected_word = selected_string.substr(0, parse_marker);
 	
 	vector<word_t> cat_list = curr_dict.at(category);
 	word_t word_info;
@@ -391,7 +392,7 @@ void ContentMenu::EditWord(wxCommandEvent& event) {
 		}
 		else {
 			search_list->Delete(found_index);
-			search_list->Append(word_info.word + ": " + word_info.definition);
+			search_list->Append(word_info.word + wxString(": ") + word_info.definition);
 			curr_dict.at(category)[found_index] = word_info;
 
 			*info_box << "Edited word was placed at the bottom of the list!";
@@ -411,9 +412,9 @@ void ContentMenu::DeleteWord(wxCommandEvent& event) {
 
 	// Find existing word in json obj
 	// Has to use an iterator because vector::erase uses it
-	string selected_string = (string)search_list->GetString(search_list->GetSelection()).ToAscii();
+	wxString selected_string = search_list->GetString(search_list->GetSelection());
 	int parse_marker = selected_string.find(":");
-	string selected_word = selected_string.substr(0, parse_marker);
+	wxString selected_word = selected_string.substr(0, parse_marker);
 
 	vector<word_t> cat_list = curr_dict.at(category);
 	word_t word_info;

@@ -47,8 +47,8 @@ private:
 
 	// Constructor Params
 
-	string* word_name;
-	string* definition;
+	wstring* word_name;
+	wstring* definition;
 	map<string, special_char> special_char_map;
 	wxTextCtrl* selected_entry; // for knowing where to insert char
 
@@ -58,7 +58,7 @@ public:
 	* The constructor takes the addresses of the attributes of a word 
 	* structure. That word is then added to or changed in the dictionary.
 	*/
-	EditWordMenu(string *word_name, string *definition,
+	EditWordMenu(wstring *word_name, wstring *definition,
 		map<string, special_char> *special_char_map);
 
 	// Closes the window with the changes made
