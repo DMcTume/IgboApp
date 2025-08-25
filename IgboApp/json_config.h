@@ -29,7 +29,7 @@
 using json = nlohmann::json;
 using namespace std;
 
-// Structure for serializing
+// Structure for serialization
 typedef struct word_structure {
 	wstring word;
 	wstring definition;
@@ -38,12 +38,19 @@ typedef struct word_structure {
 } word_t;
 
 // Sources for conversion: DeepSeek and https://json.nlohmann.me/home/faq/#wide-string-handling
+/*
+* The following two functions are for converting between the 
+* system's default encoding space (e.g. likely UTF-16 for me, because I use Windows)
+* and JSON's UTF-8 string encoding space.
+* These two functions are what allow Unicode to be readable both
+* in program and in JSON.
+*/
 
 string wstring_to_utf8(const wstring& wide_string);
 
 wstring utf8_to_wstring(const string& utf8_string);
 
-
+// Main source that helped: https://www.youtube.com/watch?app=desktop&v=Sa8bdVogGIo&t=476s
 // Actual serialization:
 namespace nlohmann {
 	template<>

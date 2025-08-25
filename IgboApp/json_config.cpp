@@ -84,11 +84,13 @@ int create_backup(fstream* original, fstream* backup,
 	return BACKUP_SUCCESS;
 }
 
+// Uses converter to convert wstring to utf-8 string
 string wstring_to_utf8(const wstring& wide_string) {
 	static wstring_convert<codecvt_utf8_utf16<wchar_t>> utf8_conv;
 	return utf8_conv.to_bytes(wide_string);
 }
 
+// Uses converter to convert utf8-string to wstring
 wstring utf8_to_wstring(const string& utf8_string) {
 	static wstring_convert< codecvt_utf8_utf16<wchar_t>> utf8_conv;
 	return utf8_conv.from_bytes(utf8_string);
