@@ -132,10 +132,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="content_menu.cpp" />
+    <ClCompile Include="dict_view.cpp" />
     <ClCompile Include="edit_word_menu.cpp" />
     <ClCompile Include="main_app.cpp" />
     <ClCompile Include="generic_menu.cpp" />
     <ClInclude Include="content_menu.h" />
+    <ClInclude Include="dict_view.h" />
     <ClInclude Include="edit_word_menu.h" />
     <ClInclude Include="json_config.h" />
     <ClCompile Include="json_config.cpp" />

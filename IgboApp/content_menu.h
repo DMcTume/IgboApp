@@ -77,6 +77,7 @@ private:
 	wxButton* edit_button;
 	wxButton* push_changes_button;
 	wxButton* delete_button;
+	wxButton* view_button;
 
 	wxTextCtrl* info_box;
 
@@ -143,6 +144,9 @@ private:
 
 	// Toggles capitalization of special chars
 	void ToggleCaps(wxCommandEvent& event);
+
+	// For opening a new window to view current words
+	void OpenDictView(wxCommandEvent& event);
 
 public:
 	ContentMenu(const char *menu_name, 

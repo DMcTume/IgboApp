@@ -45,6 +45,9 @@
     <ClCompile Include="practice_menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dict_view.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="generic_menu.h">
@@ -69,6 +72,9 @@
       <Filter>Header Files\CustomHeaders</Filter>
     </ClInclude>
     <ClInclude Include="practice_menu.h">
+      <Filter>Header Files\CustomHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="dict_view.h">
       <Filter>Header Files\CustomHeaders</Filter>
     </ClInclude>
   </ItemGroup>

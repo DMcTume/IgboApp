@@ -87,7 +87,15 @@ void EditWordMenu::OnCancel(wxCommandEvent& event) {
 void EditWordMenu::SubmitEdit(wxCommandEvent& event) {
 	
 	wxString submitted_name = word_name_entry->GetValue();
+	if (submitted_name == "") {
+		wxLogMessage("Word name cannot be empty!");
+		return;
+	}
+
 	wxString submitted_definition = definition_entry->GetValue();
+	if (submitted_definition == "") {
+		submitted_definition = "empty def";
+	}
 
 	*word_name = submitted_name;
 	*definition = submitted_definition;

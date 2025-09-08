@@ -2,6 +2,7 @@
 #include "vocab_menu_frame.h"
 #include "starting_menu_frame.h"
 #include "edit_word_menu.h"
+#include "dict_view.h"
 
 #include <vector>
 #include <cstdio>
@@ -94,10 +95,10 @@ ContentMenu::ContentMenu(const char *menu_name,
 	// TOP: OPTION BUTTONS (spacers used for horizontal alignment)
 
 	wxButton** buttons[] = { &add_button, &edit_button, &push_changes_button,
-		&delete_button};
+		&delete_button, &view_button};
 
 	options_sizer->AddStretchSpacer();
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 5; i++) {
 		*buttons[i] = makeMenuButton(toggle_options_panel, options_sizer,
 			wxID_ANY, NULL, default_flags);
 		(*buttons[i])->SetMinSize(wxSize(TOP_BUTTON_WIDTH, TOP_BUTTON_HEIGHT*0.75));
@@ -106,6 +107,7 @@ ContentMenu::ContentMenu(const char *menu_name,
 
 	add_button->SetLabel("Add New Word");
 	push_changes_button->SetLabel("Push Changes");
+	view_button->SetLabel("View Current Words");
 
 	// BOTTOM SUB-PANELS
 
@@ -145,6 +147,7 @@ ContentMenu::ContentMenu(const char *menu_name,
 
 	push_changes_button->Bind(wxEVT_BUTTON, &ContentMenu::PushChanges, this, wxID_ANY);
 	add_button->Bind(wxEVT_BUTTON, &ContentMenu::AddWord, this, wxID_ANY);
+	view_button->Bind(wxEVT_BUTTON, &ContentMenu::OpenDictView, this, wxID_ANY);
 }
 
 /*
@@ -246,8 +249,7 @@ void ContentMenu::SearchJSON(wxCommandEvent& event) {
 		}
 
 		vector<word_t> word_list = dict.at(category);
-		
-		// wxString search_word = user_input->GetLineText(0); 
+
 		wxString search_word = user_input->GetValue();
 		if (search_word.empty()) {
 			dict_file.close();
@@ -445,6 +447,21 @@ void ContentMenu::DeleteWord(wxCommandEvent& event) {
 		// pass
 	}
 	confirm->Destroy();
+}
+
+/*
+* 
+*/
+void ContentMenu::OpenDictView(wxCommandEvent& event) {
+	DictView* dialog = new DictView(("IGBO " + category).c_str(), 
+		curr_dict.at(category));
+	if (dialog->ShowModal() == wxID_OK) {
+		dialog->Destroy();
+	}
+	else {
+		dialog->Destroy();
+	}
+	
 }
 
 /*
